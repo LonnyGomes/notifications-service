@@ -2,6 +2,7 @@ import * as https from 'https';
 import * as fs from 'fs';
 import Koa from 'koa';
 const IO = require('koa-socket-2');
+const cors = require('koa2-cors');
 
 const app = new Koa();
 const io = new IO();
@@ -9,9 +10,17 @@ const io = new IO();
 // constants
 const HTTPS_PORT = 3001;
 
-app.use(async (ctx: any) => {
-    ctx.body = 'Hello World';
-});
+app.use(
+    cors({
+        origin: (ctx: any) => 'http://localhost:4200',
+        credentials: true,
+        allowMethods: ['GET', 'POST', 'DELETE'],
+        allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    })
+);
+// app.use(async (ctx: any) => {
+//     ctx.body = 'Hello World';
+// });
 
 const sslOptions = {
     key: fs.readFileSync('certs/server/server.local.key'),
