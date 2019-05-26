@@ -1,8 +1,10 @@
 import * as https from 'https';
 import * as fs from 'fs';
 import Koa from 'koa';
+const IO = require('koa-socket-2');
 
 const app = new Koa();
+const io = new IO();
 
 // constants
 const HTTPS_PORT = 3001;
@@ -18,6 +20,12 @@ const sslOptions = {
     requestCert: true,
     rejectUnauthorized: true,
 };
+
+io.attach(app, true, sslOptions);
+
+io.on('message', (ctx: any, data: any) => {
+    console.log('client sent data', data);
+});
 
 const httpsServer = https
     .createServer(sslOptions, app.callback())
