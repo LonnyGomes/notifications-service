@@ -15,6 +15,8 @@ const sslOptions = {
     key: fs.readFileSync('certs/server/server.local.key'),
     cert: fs.readFileSync('certs/server/server.local.crt'),
     ca: [fs.readFileSync('certs/ca/myCA.pem')],
+    requestCert: true,
+    rejectUnauthorized: true,
 };
 
 const httpsServer = https
