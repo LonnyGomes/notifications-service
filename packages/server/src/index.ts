@@ -67,18 +67,19 @@ router.post('/authenticate', async (ctx: any) => {
 
 router.post('/publish', koaBody(), async (ctx: any, next: any) => {
     const body = ctx.request.body;
+    console.log('body', body);
 
     if (!body.eventName) {
         ctx.status = 400;
         ctx.message = 'Missing eventName';
-        ctx.body = { results: 'failed' };
+        ctx.body = { results: 'failed', message: ctx.message };
         return next(ctx.message);
     }
 
     if (!body.data) {
         ctx.status = 400;
         ctx.message = 'Missing data';
-        ctx.body = { results: 'failed' };
+        ctx.body = { results: 'failed', message: ctx.message };
         return next(ctx.message);
     }
 
