@@ -1,33 +1,17 @@
-import * as https from 'https';
 import * as fs from 'fs';
-// import Koa from 'koa';
-const Koa = require('koa');
+import Koa from 'koa';
+import Router from 'koa-router';
+import cors from 'koa2-cors';
 const IO = require('koa-socket-2');
-const cors = require('koa2-cors');
 
 const app = new Koa();
+const router = new Router();
 const io = new IO();
 
 // constants
 const HTTPS_PORT = 3001;
 
-app.use(
-    cors({
-        origin: (ctx: any) => 'http://localhost:4200',
-        credentials: true,
-        allowMethods: ['GET', 'POST', 'DELETE'],
-        allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    })
-);
-// app.use(async (ctx: any) => {
-//     ctx.body = 'Hello World';
-// });
-
-app.use(async (ctx: any, next: any) => {
-    console.log('request', ctx.req.connection.getPeerCertificate());
-    await next();
-});
-
+// SSL configurations
 const sslOptions = {
     key: fs.readFileSync('certs/server/server.local.key'),
     cert: fs.readFileSync('certs/server/server.local.crt'),
@@ -36,29 +20,46 @@ const sslOptions = {
     rejectUnauthorized: true,
 };
 
+// enable CORS
+app.use(
+    cors({
+        origin: (ctx: any) => 'http://localhost:4200',
+        credentials: true,
+        allowMethods: ['GET', 'POST', 'DELETE'],
+        allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    })
+);
+
+router.get('/', async (ctx: any) => {
+    ctx.body = 'Hello World';
+});
+
+// attach socket.io server to koa
 io.attach(app, true, sslOptions);
 
-app.io.on('message', (ctx: any, data: any) => {
+app.use(async (ctx: any, next: any) => {
+    console.log('request', ctx.req.connection.getPeerCertificate());
+    await next();
+});
+
+io.use(async (ctx: any, next: any) => {
+    console.log('request', Object.keys(ctx.socket.conn));
+    await next();
+});
+
+io.on('message', (ctx: any, data: any) => {
     console.log('client sent data', data);
 });
 
-app.io.on('connection', (socket: any) => {
+io.on('connection', (socket: any) => {
     console.log('socket connected');
     setInterval(() => {
-        app.io.broadcast('news', { my: 'news' });
+        io.broadcast('news', { my: 'news' });
     }, 5000);
 });
 
-// app.server = https.createServer(sslOptions, app.callback());
-// app.listen = function() {
-//     app.server.listen.apply(app.server, arguments);
-//     return app.server;
-// };
-app.listen(HTTPS_PORT);
+app.use(router.routes()).use(router.allowedMethods());
 
-// const httpsServer = https
-//     .createServer(sslOptions, app.callback())
-//     .listen(HTTPS_PORT, () => {
-//         const protocol = httpsServer.addContext ? 'https' : 'http';
-//         console.log(`Listening on ${protocol}://localhost:${HTTPS_PORT} ...`);
-//     });
+app.listen(HTTPS_PORT, () => {
+    console.log(`Listening on port ${HTTPS_PORT}`);
+});
