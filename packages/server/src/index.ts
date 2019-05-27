@@ -12,6 +12,12 @@ const io = new IO();
 // constants
 const HTTPS_PORT = 3001;
 
+interface SocketDataModel {
+    timestamp?: Date;
+    level: 'info' | 'warn' | 'error';
+    message: string;
+}
+
 // SSL configurations
 const sslOptions = {
     key: fs.readFileSync('certs/server/server.local.key'),
@@ -67,7 +73,7 @@ router.post('/authenticate', async (ctx: any) => {
 
 router.post('/publish', koaBody(), async (ctx: any, next: any) => {
     const body = ctx.request.body;
-    console.log('body', body);
+    let data: SocketDataModel;
 
     if (!body.eventName) {
         ctx.status = 400;
@@ -83,7 +89,15 @@ router.post('/publish', koaBody(), async (ctx: any, next: any) => {
         return next(ctx.message);
     }
 
-    io.broadcast(body.eventName, { data: body.data });
+    // create data object by cherry picking expected fields
+    // as we want to control what is actually getting passed through
+    data = {
+        timestamp: body.data.timestamp || Date.now(),
+        level: body.data.level || 'info',
+        message: body.data.message || 'No message!',
+    };
+
+    io.broadcast(body.eventName, data);
     ctx.body = { results: 'success' };
     await next();
 });
