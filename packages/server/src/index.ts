@@ -65,6 +65,28 @@ router.post('/authenticate', async (ctx: any) => {
     ctx.body = { token: 'TODO', cert };
 });
 
+router.post('/publish', koaBody(), async (ctx: any, next: any) => {
+    const body = ctx.request.body;
+
+    if (!body.eventName) {
+        ctx.status = 400;
+        ctx.message = 'Missing eventName';
+        ctx.body = { results: 'failed' };
+        return next(ctx.message);
+    }
+
+    if (!body.data) {
+        ctx.status = 400;
+        ctx.message = 'Missing data';
+        ctx.body = { results: 'failed' };
+        return next(ctx.message);
+    }
+
+    io.broadcast(body.eventName, { data: body.data });
+    ctx.body = { results: 'success' };
+    await next();
+});
+
 // attach socket.io server to koa
 io.attach(app, true, sslOptions);
 
