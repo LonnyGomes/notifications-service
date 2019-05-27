@@ -95,7 +95,9 @@ app.use(async (ctx: any, next: any) => {
 });
 
 io.use(async (ctx: any, next: any) => {
-    console.log('request', Object.keys(ctx.socket.conn));
+    const connection = ctx.socket.request.connection;
+    const cert = connection.ssl.getPeerCertificate();
+    console.log('request', cert);
     await next();
 });
 
@@ -104,7 +106,9 @@ io.on('message', (ctx: any, data: any) => {
 });
 
 io.on('connection', (socket: any) => {
-    console.log('socket connected');
+    const connection = socket.data.client.request.connection;
+    const cert = connection.ssl.getPeerCertificate();
+    console.log('web socket cert', cert);
     setInterval(() => {
         io.broadcast('news', { my: 'news' });
     }, 5000);
