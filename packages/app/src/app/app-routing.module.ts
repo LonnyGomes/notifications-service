@@ -4,7 +4,7 @@ import { NotificationsFeedComponent } from './notifications-feed/notifications-f
 
 const routes: Routes = [
   { path: 'feed', component: NotificationsFeedComponent },
-  { path: '**', component: NotificationsFeedComponent }
+  { path: '**', redirectTo: '/feed', pathMatch: 'full' }
 ];
 
 @NgModule({
