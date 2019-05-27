@@ -30,15 +30,23 @@ app.use(
     })
 );
 
-router.get('/', async (ctx: any) => {
-    ctx.body = 'Hello World';
+router.get('/', async (ctx: any, next: any) => {
+    const start = Date.now();
+    await next();
+    const ms = Date.now() - start;
+    ctx.set('X-Response-Time', `${ms}ms`);
+    ctx.body = { ping: ms };
+});
+
+router.post('/authenticate', async (ctx: any) => {
+    const cert = ctx.req.connection.getPeerCertificate();
+    ctx.body = { token: 'TODO', cert };
 });
 
 // attach socket.io server to koa
 io.attach(app, true, sslOptions);
 
 app.use(async (ctx: any, next: any) => {
-    console.log('request', ctx.req.connection.getPeerCertificate());
     await next();
 });
 
