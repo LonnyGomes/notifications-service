@@ -3,6 +3,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
 const IO = require('koa-socket-2');
+const koaBody = require('koa-body');
 
 const app = new Koa();
 const router = new Router();
