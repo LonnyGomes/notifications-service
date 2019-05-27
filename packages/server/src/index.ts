@@ -1,27 +1,17 @@
-import * as https from 'https';
 import * as fs from 'fs';
 import Koa from 'koa';
+import Router from 'koa-router';
+import cors from 'koa2-cors';
 const IO = require('koa-socket-2');
-const cors = require('koa2-cors');
 
 const app = new Koa();
+const router = new Router();
 const io = new IO();
 
 // constants
 const HTTPS_PORT = 3001;
 
-app.use(
-    cors({
-        origin: (ctx: any) => 'http://localhost:4200',
-        credentials: true,
-        allowMethods: ['GET', 'POST', 'DELETE'],
-        allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
-    })
-);
-// app.use(async (ctx: any) => {
-//     ctx.body = 'Hello World';
-// });
-
+// SSL configurations
 const sslOptions = {
     key: fs.readFileSync('certs/server/server.local.key'),
     cert: fs.readFileSync('certs/server/server.local.crt'),
@@ -30,15 +20,54 @@ const sslOptions = {
     rejectUnauthorized: true,
 };
 
+// enable CORS
+app.use(
+    cors({
+        origin: (ctx: any) => 'http://localhost:4200',
+        credentials: true,
+        allowMethods: ['GET', 'POST', 'DELETE'],
+        allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    })
+);
+
+router.get('/', async (ctx: any, next: any) => {
+    const start = Date.now();
+    await next();
+    const ms = Date.now() - start;
+    ctx.set('X-Response-Time', `${ms}ms`);
+    ctx.body = { ping: ms };
+});
+
+router.post('/authenticate', async (ctx: any) => {
+    const cert = ctx.req.connection.getPeerCertificate();
+    ctx.body = { token: 'TODO', cert };
+});
+
+// attach socket.io server to koa
 io.attach(app, true, sslOptions);
+
+app.use(async (ctx: any, next: any) => {
+    await next();
+});
+
+io.use(async (ctx: any, next: any) => {
+    console.log('request', Object.keys(ctx.socket.conn));
+    await next();
+});
 
 io.on('message', (ctx: any, data: any) => {
     console.log('client sent data', data);
 });
 
-const httpsServer = https
-    .createServer(sslOptions, app.callback())
-    .listen(HTTPS_PORT, () => {
-        const protocol = httpsServer.addContext ? 'https' : 'http';
-        console.log(`Listening on ${protocol}://localhost:${HTTPS_PORT} ...`);
-    });
+io.on('connection', (socket: any) => {
+    console.log('socket connected');
+    setInterval(() => {
+        io.broadcast('news', { my: 'news' });
+    }, 5000);
+});
+
+app.use(router.routes()).use(router.allowedMethods());
+
+app.listen(HTTPS_PORT, () => {
+    console.log(`Listening on port ${HTTPS_PORT}`);
+});
