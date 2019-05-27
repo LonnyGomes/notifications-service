@@ -109,10 +109,16 @@ io.on('connection', (socket: any) => {
     const connection = socket.data.client.request.connection;
     const cert = connection.ssl.getPeerCertificate();
     console.log('web socket cert', cert);
-    setInterval(() => {
-        io.broadcast('news', { my: 'news' });
-    }, 5000);
 });
+
+setInterval(() => {
+    const data = {
+        timestamp: Date.now(),
+        level: 'info',
+        message: `Message at ${new Date()}`,
+    };
+    io.broadcast('news', data);
+}, 15000);
 
 app.use(router.routes()).use(router.allowedMethods());
 
