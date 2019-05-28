@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import Koa from 'koa';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
+import { createHash } from 'crypto';
+
 const IO = require('koa-socket-2');
 const koaBody = require('koa-body');
 
@@ -11,6 +13,13 @@ const io = new IO();
 
 // constants
 const HTTPS_PORT = 3001;
+
+interface SocketDataModel {
+    id: string;
+    timestamp?: Date;
+    level: 'info' | 'warn' | 'error';
+    message: string;
+}
 
 // SSL configurations
 const sslOptions = {
@@ -52,6 +61,18 @@ app.use(async function(ctx, next) {
     }
 });
 
+app.use(async (ctx: any, next: any) => {
+    const cert = ctx.req.connection.getPeerCertificate();
+    if (!cert) {
+        ctx.status = 401;
+        ctx.message = 'Client certificate not provided!';
+        ctx.body = { results: 'failed', message: ctx.message };
+        throw new Error(ctx.message);
+    }
+    ctx.state.cert = cert;
+    await next();
+});
+
 router.get('/', async (ctx: any, next: any) => {
     const start = Date.now();
     await next();
@@ -60,39 +81,49 @@ router.get('/', async (ctx: any, next: any) => {
     ctx.body = { ping: ms };
 });
 
-router.post('/authenticate', async (ctx: any) => {
-    const cert = ctx.req.connection.getPeerCertificate();
-    ctx.body = { token: 'TODO', cert };
-});
-
 router.post('/publish', koaBody(), async (ctx: any, next: any) => {
     const body = ctx.request.body;
+    let data: SocketDataModel;
 
     if (!body.eventName) {
         ctx.status = 400;
         ctx.message = 'Missing eventName';
-        ctx.body = { results: 'failed' };
+        ctx.body = { results: 'failed', message: ctx.message };
         return next(ctx.message);
     }
 
     if (!body.data) {
         ctx.status = 400;
         ctx.message = 'Missing data';
-        ctx.body = { results: 'failed' };
+        ctx.body = { results: 'failed', message: ctx.message };
         return next(ctx.message);
     }
 
-    io.broadcast(body.eventName, { data: body.data });
+    // generate unique id for data payload
+    const key = JSON.stringify(ctx.state.cert)
+        .concat(String(Date.now()))
+        .concat(String(Math.random() * 100000));
+    const id = createHash('sha256')
+        .update(key, 'utf8')
+        .digest()
+        .toString('hex');
+
+    // create data object by cherry picking expected fields
+    // as we want to control what is actually getting passed through
+    data = {
+        id,
+        timestamp: body.data.timestamp || Date.now(),
+        level: body.data.level || 'info',
+        message: body.data.message || 'No message!',
+    };
+
+    io.broadcast(body.eventName, data);
     ctx.body = { results: 'success' };
     await next();
 });
 
 // attach socket.io server to koa
 io.attach(app, true, sslOptions);
-
-app.use(async (ctx: any, next: any) => {
-    await next();
-});
 
 io.use(async (ctx: any, next: any) => {
     const connection = ctx.socket.request.connection;
@@ -109,10 +140,17 @@ io.on('connection', (socket: any) => {
     const connection = socket.data.client.request.connection;
     const cert = connection.ssl.getPeerCertificate();
     console.log('web socket cert', cert);
-    setInterval(() => {
-        io.broadcast('news', { my: 'news' });
-    }, 5000);
 });
+
+setInterval(() => {
+    const data = {
+        id: String(Date.now()).concat(String(Math.random() * 10000)),
+        timestamp: Date.now(),
+        level: 'info',
+        message: `Message at ${new Date()}`,
+    };
+    io.broadcast('news', data);
+}, 15000);
 
 app.use(router.routes()).use(router.allowedMethods());
 

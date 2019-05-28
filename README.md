@@ -28,6 +28,12 @@ Included is a self-signed cert for the "application". The server enforces client
 curl --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem https://server.local:3001/
 ```
 
+**Triggering a notification via curl**
+
+```bash
+curl -X POST --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem -d '{ "eventName":"news", "data":{"level":"info","message":"this is from curl"}}' -H 'Content-Type: application/json' https://server.local:3001/publish
+```
+
 ### App
 
 The app is built on electron and Angular
