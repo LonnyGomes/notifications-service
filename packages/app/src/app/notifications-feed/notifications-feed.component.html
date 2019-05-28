@@ -1,4 +1,5 @@
 <ng-container *ngIf="notifications.length > 0; else emptyqueue">
+  <button mat-button (click)="dismissAll()">Dismiss all</button>
   <mat-card
     class="notification-card"
     *ngFor="let notification of notifications"

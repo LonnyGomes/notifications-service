@@ -32,4 +32,8 @@ export class NotificationsFeedComponent implements OnInit {
       curItem => curItem.data.id !== id
     );
   }
+
+  dismissAll() {
+    this.notifications = [];
+  }
 }
