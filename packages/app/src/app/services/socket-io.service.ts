@@ -3,6 +3,7 @@ import * as io from 'socket.io-client';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface SocketMessageDataModel {
+  id: string;
   timestamp: Date;
   level: 'info' | 'warn' | 'error';
   message: string;
