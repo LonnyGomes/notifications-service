@@ -1,8 +1,22 @@
-<p>
-  notifications-feed works!
-</p>
+<ng-container *ngIf="notifications.length > 0; else emptyqueue">
+  <mat-card
+    class="notification-card"
+    *ngFor="let notification of notifications"
+  >
+    <mat-card-header>
+      <mat-card-title
+        >Message type: {{ notification.eventName }}</mat-card-title
+      >
+      <mat-card-subtitle>{{
+        notification.data.timestamp | date: 'medium'
+      }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{ notification.data.message }}</p>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
 
-<div *ngFor="let notification of notifications">
-  {{ notification.eventName }}
-  {{ notification.data.message }}
-</div>
+<ng-template #emptyqueue>
+  <h3>No notifications</h3>
+</ng-template>
