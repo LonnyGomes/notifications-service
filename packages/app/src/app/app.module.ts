@@ -6,10 +6,17 @@ import { AppComponent } from './app.component';
 import { NotificationsFeedComponent } from './notifications-feed/notifications-feed.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [AppComponent, NotificationsFeedComponent],
-  imports: [BrowserModule, AppRoutingModule, MatToolbarModule, MatCardModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    MatToolbarModule,
+    MatCardModule,
+    MatButtonModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
