@@ -7,6 +7,7 @@ import { NotificationsFeedComponent } from './notifications-feed/notifications-f
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [AppComponent, NotificationsFeedComponent],
@@ -15,7 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
     AppRoutingModule,
     MatToolbarModule,
     MatCardModule,
-    MatButtonModule
+    MatButtonModule,
+    MatBadgeModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,6 +1,13 @@
 <div class="notification-container">
   <ng-container *ngIf="notifications.length > 0; else emptyqueue">
-    <button mat-raised-button color="primary" (click)="dismissAll()">
+    <button
+      mat-raised-button
+      color="primary"
+      matBadge="{{ notifications.length }}"
+      matBadgePosition="after"
+      matBadgeColor="accent"
+      (click)="dismissAll()"
+    >
       Dismiss all
     </button>
     <mat-card
