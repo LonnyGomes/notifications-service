@@ -14,6 +14,11 @@
     <mat-card-content>
       <p>{{ notification.data.message }}</p>
     </mat-card-content>
+    <mat-card-actions>
+      <button (click)="removeNotification(notification.data.id)" mat-button>
+        Dismiss
+      </button>
+    </mat-card-actions>
   </mat-card>
 </ng-container>
 

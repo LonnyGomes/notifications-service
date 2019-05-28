@@ -26,4 +26,10 @@ export class NotificationsFeedComponent implements OnInit {
       this.notifications.unshift(model);
     });
   }
+
+  removeNotification(id: string) {
+    this.notifications = this.notifications.filter(
+      curItem => curItem.data.id !== id
+    );
+  }
 }
