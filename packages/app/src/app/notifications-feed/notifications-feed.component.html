@@ -1,27 +1,31 @@
-<ng-container *ngIf="notifications.length > 0; else emptyqueue">
-  <button mat-button (click)="dismissAll()">Dismiss all</button>
-  <mat-card
-    class="notification-card"
-    *ngFor="let notification of notifications"
-  >
-    <mat-card-header>
-      <mat-card-title
-        >Message type: {{ notification.eventName }}</mat-card-title
-      >
-      <mat-card-subtitle>{{
-        notification.data.timestamp | date: 'medium'
-      }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <p>{{ notification.data.message }}</p>
-    </mat-card-content>
-    <mat-card-actions>
-      <button (click)="removeNotification(notification.data.id)" mat-button>
-        Dismiss
-      </button>
-    </mat-card-actions>
-  </mat-card>
-</ng-container>
+<div class="notification-container">
+  <ng-container *ngIf="notifications.length > 0; else emptyqueue">
+    <button mat-raised-button color="primary" (click)="dismissAll()">
+      Dismiss all
+    </button>
+    <mat-card
+      class="notification-card"
+      *ngFor="let notification of notifications"
+    >
+      <mat-card-header>
+        <mat-card-title
+          >Message type: {{ notification.eventName }}</mat-card-title
+        >
+        <mat-card-subtitle>{{
+          notification.data.timestamp | date: 'medium'
+        }}</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ notification.data.message }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button (click)="removeNotification(notification.data.id)" mat-button>
+          Dismiss
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+</div>
 
 <ng-template #emptyqueue>
   <h3>No notifications</h3>
