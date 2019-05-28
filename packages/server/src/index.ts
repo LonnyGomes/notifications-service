@@ -144,6 +144,7 @@ io.on('connection', (socket: any) => {
 
 setInterval(() => {
     const data = {
+        id: String(Date.now()).concat(String(Math.random() * 10000)),
         timestamp: Date.now(),
         level: 'info',
         message: `Message at ${new Date()}`,
