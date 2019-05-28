@@ -58,6 +58,18 @@ app.use(async function(ctx, next) {
     }
 });
 
+app.use(async (ctx: any, next: any) => {
+    const cert = ctx.req.connection.getPeerCertificate();
+    if (!cert) {
+        ctx.status = 401;
+        ctx.message = 'Client certificate not provided!';
+        ctx.body = { results: 'failed', message: ctx.message };
+        throw new Error(ctx.message);
+    }
+    ctx.state.cert = cert;
+    await next();
+});
+
 router.get('/', async (ctx: any, next: any) => {
     const start = Date.now();
     await next();
