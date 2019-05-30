@@ -22,6 +22,12 @@ export class SocketIoService {
   // tslint:disable-next-line:variable-name
   private _notifications: SocketMessageModel[];
 
+  private SUBSCRIPTION_STATES = {
+    news: true,
+    DevOps: false,
+    Releases: false
+  };
+
   constructor() {
     this._notifications = [];
     this.socket$ = new BehaviorSubject(null);
@@ -41,6 +47,10 @@ export class SocketIoService {
 
   get observable(): Observable<SocketMessageModel> {
     return this.socket$.asObservable();
+  }
+
+  get subscriptionStates() {
+    return this.SUBSCRIPTION_STATES;
   }
 
   // notifications
