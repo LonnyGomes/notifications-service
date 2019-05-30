@@ -49,7 +49,13 @@ export class SocketIoService {
   }
 
   addNotification(model: SocketMessageModel) {
-    this._notifications.unshift(model);
+    const results = this._notifications.filter(
+      curModel => curModel.data.id === model.data.id
+    );
+    // only add unique models to the list of notifications
+    if (results.length === 0) {
+      this._notifications.unshift(model);
+    }
   }
   dismissAll() {
     this._notifications = [];
