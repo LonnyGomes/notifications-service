@@ -8,6 +8,8 @@ import { SocketIoService } from '../services/socket-io.service';
 })
 export class SubscriptionsComponent implements OnInit {
   newsChecked = true;
+  devOpsChecked = false;
+  releasesChecked = false;
   constructor(private socket: SocketIoService) {}
 
   ngOnInit() {}
