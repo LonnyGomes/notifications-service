@@ -34,6 +34,14 @@ curl --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs
 curl -X POST --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem -d '{ "eventName":"news", "data":{"level":"info","message":"this is from curl"}}' -H 'Content-Type: application/json' https://server.local:3001/publish
 ```
 
+Alternatively, you can invoke curl using the included shorthand npm script:
+
+The following sends the message `This is an example notification 🔥` to the event name called `news`.
+
+```bash
+npm run send news 'This is an example notification 🔥'
+```
+
 ### App
 
 The app is built on electron and Angular
