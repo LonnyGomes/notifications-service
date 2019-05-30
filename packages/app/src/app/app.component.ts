@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { SocketIoService } from './services/socket-io.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +7,5 @@ import { SocketIoService } from './services/socket-io.service';
 })
 export class AppComponent {
   title = 'cricket';
-  constructor(private socket: SocketIoService) {}
+  constructor() {}
 }
