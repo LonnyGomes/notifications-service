@@ -29,6 +29,7 @@ export class NotificationsFeedComponent implements OnInit {
 
   removeNotification(id: string) {
     this.socket.removeNotification(id);
+    this.notifications = this.socket.notifications;
   }
 
   dismissAll() {
