@@ -40,7 +40,7 @@ export class SocketIoService {
   }
 
   listenOnEventName(eventName) {
-    this.socket.on('news', data => {
+    this.socket.on(eventName, data => {
       // send system notification
       const myNotification = new Notification(`Message from ${eventName}`, {
         body: data.message
