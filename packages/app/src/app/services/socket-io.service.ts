@@ -22,13 +22,7 @@ export class SocketIoService {
   constructor() {
     this.socket$ = new BehaviorSubject(null);
     this.socket = io('https://server.local:3001');
-    this.socket.on('news', data => {
-      // update update subject
-      this.socket$.next({
-        eventName: 'news',
-        data
-      });
-    });
+
     this.socket.on('connect', () => {
       console.log('connected to socket.io server');
     });
@@ -37,9 +31,21 @@ export class SocketIoService {
       level: 'info',
       message: 'Sending to server'
     });
+
+    this.listenOnEventName('news');
   }
 
   get observable(): Observable<SocketMessageModel> {
     return this.socket$.asObservable();
+  }
+
+  listenOnEventName(eventName) {
+    this.socket.on('news', data => {
+      // update update subject
+      this.socket$.next({
+        eventName,
+        data
+      });
+    });
   }
 }
