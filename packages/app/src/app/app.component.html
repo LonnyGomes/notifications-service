@@ -1,4 +1,11 @@
 <mat-toolbar>
+  <div class="menu-container">
+    <button mat-button [matMenuTriggerFor]="menu">Menu</button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item routerLink="/feeds">Notifications</button>
+      <button mat-menu-item routerLink="/subscriptions">Subscriptions</button>
+    </mat-menu>
+  </div>
   <span>Cricket</span>
 </mat-toolbar>
 

@@ -19,7 +19,11 @@ export interface SocketMessageModel {
 export class SocketIoService {
   private socket = null;
   private socket$: BehaviorSubject<SocketMessageModel>;
+  // tslint:disable-next-line:variable-name
+  private _notifications: SocketMessageModel[];
+
   constructor() {
+    this._notifications = [];
     this.socket$ = new BehaviorSubject(null);
     this.socket = io('https://server.local:3001');
 
@@ -37,6 +41,29 @@ export class SocketIoService {
 
   get observable(): Observable<SocketMessageModel> {
     return this.socket$.asObservable();
+  }
+
+  // notifications
+  get notifications(): SocketMessageModel[] {
+    return this._notifications;
+  }
+
+  addNotification(model: SocketMessageModel) {
+    this._notifications.unshift(model);
+  }
+  dismissAll() {
+    this._notifications = [];
+    return this._notifications;
+  }
+
+  removeNotification(id: string) {
+    this._notifications = this._notifications.filter(
+      curItem => curItem.data.id !== id
+    );
+  }
+
+  muteEventName(eventName) {
+    this.socket.off(eventName);
   }
 
   listenOnEventName(eventName) {

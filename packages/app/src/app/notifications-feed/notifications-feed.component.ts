@@ -14,7 +14,7 @@ export class NotificationsFeedComponent implements OnInit {
   notifications: SocketMessageModel[];
 
   constructor(private socket: SocketIoService) {
-    this.notifications = [];
+    this.notifications = this.socket.notifications;
   }
 
   ngOnInit() {
@@ -23,17 +23,16 @@ export class NotificationsFeedComponent implements OnInit {
         // ignore models that have no data
         return;
       }
-      this.notifications.unshift(model);
+      this.socket.addNotification(model);
     });
   }
 
   removeNotification(id: string) {
-    this.notifications = this.notifications.filter(
-      curItem => curItem.data.id !== id
-    );
+    this.socket.removeNotification(id);
   }
 
   dismissAll() {
-    this.notifications = [];
+    this.socket.dismissAll();
+    this.notifications = this.socket.notifications;
   }
 }

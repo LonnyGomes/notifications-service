@@ -1,0 +1,38 @@
+<h2>Notification Subscriptions</h2>
+<div class="toggles-container">
+  <mat-slide-toggle
+    class="toggle-item"
+    name="news"
+    class="example-margin"
+    color="primary"
+    labelPosition="before"
+    [checked]="newsChecked"
+    (change)="onToggleChange($event)"
+  >
+    News
+  </mat-slide-toggle>
+  <br />
+  <mat-slide-toggle
+    class="toggle-item"
+    name="DevOps"
+    class="example-margin"
+    color="primary"
+    labelPosition="before"
+    [checked]="devOpsChecked"
+    (change)="onToggleChange($event)"
+  >
+    DevOps
+  </mat-slide-toggle>
+  <br />
+  <mat-slide-toggle
+    class="toggle-item"
+    name="Releases"
+    class="example-margin"
+    color="primary"
+    labelPosition="before"
+    [checked]="releasesChecked"
+    (change)="onToggleChange($event)"
+  >
+    Releases
+  </mat-slide-toggle>
+</div>
