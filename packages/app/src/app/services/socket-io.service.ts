@@ -41,6 +41,15 @@ export class SocketIoService {
 
   listenOnEventName(eventName) {
     this.socket.on('news', data => {
+      // send system notification
+      const myNotification = new Notification(`Message from ${eventName}`, {
+        body: data.message
+      });
+
+      myNotification.addEventListener('click', () => {
+        console.log('TODO');
+      });
+
       // update update subject
       this.socket$.next({
         eventName,
