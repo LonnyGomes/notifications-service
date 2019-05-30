@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SocketIoService } from '../services/socket-io.service';
 
 @Component({
   selector: 'app-subscriptions',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./subscriptions.component.scss']
 })
 export class SubscriptionsComponent implements OnInit {
+  newsChecked = true;
+  constructor(private socket: SocketIoService) {}
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
+  onToggleChange($event) {
+    const source = $event.source;
+
+    if ($event.checked) {
+      this.socket.listenOnEventName(source.name);
+    } else {
+      this.socket.muteEventName(source.name);
+    }
   }
-
 }

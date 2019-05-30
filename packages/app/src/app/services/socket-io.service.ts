@@ -62,6 +62,10 @@ export class SocketIoService {
     );
   }
 
+  muteEventName(eventName) {
+    this.socket.off(eventName);
+  }
+
   listenOnEventName(eventName) {
     this.socket.on(eventName, data => {
       // send system notification

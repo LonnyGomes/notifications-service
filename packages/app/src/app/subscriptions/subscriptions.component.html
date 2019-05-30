@@ -1,4 +1,14 @@
-<button mat-raised-button color="secondary" routerLink="/feed">Back</button>
-<p>
-  subscriptions works!
-</p>
+<button mat-raised-button color="accent" routerLink="/feed">Back</button>
+
+<div class="toggles-container">
+  <mat-slide-toggle
+    name="news"
+    class="example-margin"
+    color="primary"
+    labelPosition="before"
+    [checked]="newsChecked"
+    (change)="onToggleChange($event)"
+  >
+    News
+  </mat-slide-toggle>
+</div>
