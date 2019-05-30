@@ -8,9 +8,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
+import { SubscriptionsComponent } from './subscriptions/subscriptions.component';
 
 @NgModule({
-  declarations: [AppComponent, NotificationsFeedComponent],
+  declarations: [AppComponent, NotificationsFeedComponent, SubscriptionsComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
