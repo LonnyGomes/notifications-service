@@ -1,16 +1,11 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { NotificationModel } from '@cricket/utils';
 
-export interface SocketMessageDataModel {
-  id: string;
-  timestamp: Date;
-  level: 'info' | 'warn' | 'error';
-  message: string;
-}
 export interface SocketMessageModel {
   eventName: string;
-  data: SocketMessageDataModel;
+  data: NotificationModel;
 }
 
 @Injectable({
