@@ -20,6 +20,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
+    "@cricket/utils": "^0.0.0",
     "@types/koa-router": "^7.0.40",
     "@types/koa2-cors": "^2.0.1",
     "koa": "^2.7.0",
