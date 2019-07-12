@@ -137,11 +137,12 @@ io.on('connection', (socket: any) => {
 });
 
 setInterval(() => {
-    const data = {
+    const data: NotificationModel = {
         id: String(Date.now()).concat(String(Math.random() * 10000)),
-        timestamp: Date.now(),
+        timestamp: new Date(),
         level: 'info',
         message: `Message at ${new Date()}`,
+        url: 'http://www.google.com',
     };
     io.broadcast('news', data);
 }, 15000);
