@@ -3,6 +3,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import cors from 'koa2-cors';
 import { createHash } from 'crypto';
+import { NotificationModel } from '@cricket/utils';
 
 const IO = require('koa-socket-2');
 const koaBody = require('koa-body');
@@ -13,13 +14,6 @@ const io = new IO();
 
 // constants
 const HTTPS_PORT = 3001;
-
-interface SocketDataModel {
-    id: string;
-    timestamp?: Date;
-    level: 'info' | 'warn' | 'error';
-    message: string;
-}
 
 // SSL configurations
 const sslOptions = {
@@ -83,7 +77,7 @@ router.get('/', async (ctx: any, next: any) => {
 
 router.post('/publish', koaBody(), async (ctx: any, next: any) => {
     const body = ctx.request.body;
-    let data: SocketDataModel;
+    let data: NotificationModel;
 
     if (!body.eventName) {
         ctx.status = 400;
