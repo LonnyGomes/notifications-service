@@ -12,7 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatMenuModule } from '@angular/material/menu';
-
+import { NgxElectronModule } from 'ngx-electron';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +28,8 @@ import { MatMenuModule } from '@angular/material/menu';
     MatButtonModule,
     MatBadgeModule,
     MatSlideToggleModule,
-    MatMenuModule
+    MatMenuModule,
+    NgxElectronModule
   ],
   providers: [],
   bootstrap: [AppComponent]

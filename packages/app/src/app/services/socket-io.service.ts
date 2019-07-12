@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { NotificationModel } from '@cricket/utils';
-
+import { ElectronService } from 'ngx-electron';
 export interface SocketMessageModel {
   eventName: string;
   data: NotificationModel;
@@ -23,7 +23,7 @@ export class SocketIoService {
     Releases: false
   };
 
-  constructor() {
+  constructor(private electron: ElectronService) {
     this._notifications = [];
     this.socket$ = new BehaviorSubject(null);
     this.socket = io('https://server.local:3001');
@@ -84,8 +84,14 @@ export class SocketIoService {
         body: data.message
       });
 
-      myNotification.addEventListener('click', () => {
-        console.log('TODO');
+      myNotification.addEventListener('click', evt => {
+        evt.preventDefault();
+        // if a URL is supplied, open it in a browser
+        if (data.url) {
+          if (this.electron.isElectronApp) {
+            this.electron.shell.openExternal(data.url);
+          }
+        }
       });
 
       // update update subject
