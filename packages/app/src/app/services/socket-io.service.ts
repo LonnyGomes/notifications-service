@@ -8,6 +8,13 @@ export interface SocketMessageModel {
   data: NotificationModel;
 }
 
+interface ChannelModel {
+  label: string;
+  name: string;
+}
+export interface ChannelStatesModel {
+  [index: string]: boolean;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -16,17 +23,24 @@ export class SocketIoService {
   private socket$: BehaviorSubject<SocketMessageModel>;
   // tslint:disable-next-line:variable-name
   private _notifications: SocketMessageModel[];
+  // tslint:disable-next-line:variable-name
+  private _channelStates: ChannelStatesModel = {};
 
-  private SUBSCRIPTION_STATES = {
-    news: true,
-    DevOps: false,
-    Releases: false
-  };
+  // TODO: retrieve this list from the server
+  channels: ChannelModel[] = [
+    { label: 'News', name: 'news' },
+    { label: 'DevOps', name: 'DevOps' },
+    { label: 'Releases', name: 'Releases' }
+  ];
 
   constructor(private electron: ElectronService) {
     this._notifications = [];
     this.socket$ = new BehaviorSubject(null);
     this.socket = io('https://server.local:3001');
+
+    this.channels.forEach(curChan => {
+      this._channelStates[curChan.name] = false;
+    });
 
     this.socket.on('connect', () => {
       console.log('connected to socket.io server');
@@ -40,12 +54,16 @@ export class SocketIoService {
     this.listenOnEventName('news');
   }
 
-  get observable(): Observable<SocketMessageModel> {
-    return this.socket$.asObservable();
+  getChannels() {
+    return this.channels;
   }
 
-  get subscriptionStates() {
-    return this.SUBSCRIPTION_STATES;
+  get channelStates(): ChannelStatesModel {
+    return this._channelStates;
+  }
+
+  get observable(): Observable<SocketMessageModel> {
+    return this.socket$.asObservable();
   }
 
   // notifications
