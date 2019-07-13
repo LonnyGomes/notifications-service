@@ -3,7 +3,6 @@
 This repository is a proof of concept example of how a notification system could be built using the following technologies:
 
 -   Electron
--   AWS SNS
 -   Angular 7
 -   SSL authentication
 
