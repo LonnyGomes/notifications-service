@@ -47,4 +47,10 @@ The app is built on in Angular and packaged in electron. It interfaces with the 
 
 ## Notification Workflows
 
-![Client Subscription Diagram](assets/client-subscription.svg)
+### Client subscription initiation
+
+![Client Subscription Diagram](assets/mermaid-client-subscription.svg)
+
+### Publishing a notification
+
+![Publishing a notification](assets/mermaid-publish-notification.svg)
