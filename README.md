@@ -15,7 +15,7 @@ This repository is a proof of concept example of how a notification system could
 
 This is a lerna-based monorepo with a server and app package.
 
-### Server
+### @cricket/server
 
 The server is a koa-based HTTPS service
 
@@ -41,6 +41,10 @@ The following sends the message `This is an example notification 🔥` to the ev
 npm run send news 'This is an example notification 🔥'
 ```
 
-### App
+### @cricket/app
 
-The app is built on electron and Angular
+The app is built on in Angular and packaged in electron. It interfaces with the server via the socket.io client and interacts with the user via native OS notifications.
+
+## Notification Workflows
+
+![Client Subscription Diagram](assets/client-subscription.svg)
