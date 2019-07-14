@@ -8,11 +8,11 @@ export interface SocketMessageModel {
   data: NotificationModel;
 }
 
-interface ChannelModel {
-  label: string;
+export interface TopicModel {
+  description: string;
   name: string;
 }
-export interface ChannelStatesModel {
+export interface TopicStatesModel {
   [index: string]: boolean;
 }
 @Injectable({
@@ -24,13 +24,13 @@ export class SocketIoService {
   // tslint:disable-next-line:variable-name
   private _notifications: SocketMessageModel[];
   // tslint:disable-next-line:variable-name
-  private _channelStates: ChannelStatesModel = {};
+  private _topicStates: TopicStatesModel = {};
 
   // TODO: retrieve this list from the server
-  channels: ChannelModel[] = [
-    { label: 'News', name: 'news' },
-    { label: 'DevOps', name: 'DevOps' },
-    { label: 'Releases', name: 'Releases' }
+  topics: TopicModel[] = [
+    { description: 'News', name: 'news' },
+    { description: 'DevOps', name: 'DevOps' },
+    { description: 'Releases', name: 'Releases' }
   ];
 
   constructor(private electron: ElectronService) {
@@ -38,8 +38,8 @@ export class SocketIoService {
     this.socket$ = new BehaviorSubject(null);
     this.socket = io('https://server.local:3001');
 
-    this.channels.forEach(curChan => {
-      this._channelStates[curChan.name] = false;
+    this.topics.forEach(curTopic => {
+      this._topicStates[curTopic.name] = false;
     });
 
     this.socket.on('connect', () => {
@@ -54,12 +54,12 @@ export class SocketIoService {
     this.listenOnEventName('news');
   }
 
-  getChannels() {
-    return this.channels;
+  getTopics() {
+    return this.topics;
   }
 
-  get channelStates(): ChannelStatesModel {
-    return this._channelStates;
+  get topicStates(): TopicStatesModel {
+    return this._topicStates;
   }
 
   get observable(): Observable<SocketMessageModel> {

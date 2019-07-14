@@ -1,14 +1,14 @@
 <h2>Notification Subscriptions</h2>
 <div class="toggles-container">
   <mat-slide-toggle
-    *ngFor="let chanel of channels"
+    *ngFor="let topic of topics"
     class="toggle-item"
-    name="{{ chanel.name }}"
+    name="{{ topic.name }}"
     class="example-margin"
     color="primary"
     labelPosition="before"
-    [checked]="checkedState[chanel.name]"
+    [checked]="checkedState[topic.name]"
     (change)="onToggleChange($event)"
-    >{{ chanel.label }}
+    >{{ topic.description }}
   </mat-slide-toggle>
 </div>

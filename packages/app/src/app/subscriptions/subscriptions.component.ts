@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
   SocketIoService,
-  ChannelStatesModel
+  TopicStatesModel,
+  TopicModel
 } from '../services/socket-io.service';
-
-interface ChannelsModel {
-  label: string;
-  name: string;
-}
 
 @Component({
   selector: 'app-subscriptions',
@@ -15,18 +11,15 @@ interface ChannelsModel {
   styleUrls: ['./subscriptions.component.scss']
 })
 export class SubscriptionsComponent implements OnInit {
-  newsChecked: boolean;
-  devOpsChecked: boolean;
-  releasesChecked: boolean;
-  channels: ChannelsModel[];
-  checkedState: ChannelStatesModel = {};
+  topics: TopicModel[];
+  checkedState: TopicStatesModel = {};
 
   constructor(private socket: SocketIoService) {}
 
   ngOnInit() {
-    // get channels
-    this.channels = this.socket.getChannels();
-    this.checkedState = this.socket.channelStates;
+    // get topics
+    this.topics = this.socket.getTopics();
+    this.checkedState = this.socket.topicStates;
   }
 
   onToggleChange($event) {
