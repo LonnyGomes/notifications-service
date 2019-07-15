@@ -28,7 +28,7 @@ export class SocketIoService {
 
   // TODO: retrieve this list from the server
   topics: TopicModel[] = [
-    { description: 'News', name: 'news' },
+    { description: 'Global', name: 'global' },
     { description: 'DevOps', name: 'DevOps' },
     { description: 'Releases', name: 'Releases' }
   ];
@@ -51,7 +51,7 @@ export class SocketIoService {
       message: 'Sending to server'
     });
 
-    this.listenOnEventName('news');
+    this.listenOnEventName('global');
   }
 
   getTopics() {

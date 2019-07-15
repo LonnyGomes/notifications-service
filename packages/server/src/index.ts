@@ -144,7 +144,7 @@ setInterval(() => {
         message: `Message at ${new Date()}`,
         url: 'http://www.google.com',
     };
-    io.broadcast('news', data);
+    io.broadcast('global', data);
 }, 15000);
 
 app.use(router.routes()).use(router.allowedMethods());
