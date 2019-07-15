@@ -4,6 +4,7 @@ import Router from 'koa-router';
 import cors from 'koa2-cors';
 import { createHash } from 'crypto';
 import { NotificationModel } from '@cricket/utils';
+import { NotificationTopic } from '@cricket/utils/src/models/notification.model';
 
 const IO = require('koa-socket-2');
 const koaBody = require('koa-body');
@@ -93,6 +94,21 @@ router.post('/publish', koaBody(), async (ctx: any, next: any) => {
         return next(ctx.message);
     }
 
+    const { timestamp, level, message, topic, tier } = body.data;
+    if (!message) {
+        ctx.status = 400;
+        ctx.message = 'Missing "message" field from data payload';
+        ctx.body = { results: 'failed', message: ctx.message };
+        return next(ctx.message);
+    }
+
+    if (!topic) {
+        ctx.status = 400;
+        ctx.message = 'Missing "topic" field from data payload';
+        ctx.body = { results: 'failed', message: ctx.message };
+        return next(ctx.message);
+    }
+
     // generate unique id for data payload
     const key = JSON.stringify(ctx.state.cert)
         .concat(String(Date.now()))
@@ -106,9 +122,11 @@ router.post('/publish', koaBody(), async (ctx: any, next: any) => {
     // as we want to control what is actually getting passed through
     data = {
         id,
-        timestamp: body.data.timestamp || Date.now(),
-        level: body.data.level || 'info',
-        message: body.data.message || 'No message!',
+        timestamp: timestamp || Date.now(),
+        tier: tier || 3,
+        level: level || 'info',
+        topic,
+        message,
     };
 
     io.broadcast(body.eventName, data);
@@ -140,6 +158,8 @@ setInterval(() => {
     const data: NotificationModel = {
         id: String(Date.now()).concat(String(Math.random() * 10000)),
         timestamp: new Date(),
+        tier: 1,
+        topic: NotificationTopic.platformA,
         level: 'info',
         message: `Message at ${new Date()}`,
         url: 'http://www.google.com',

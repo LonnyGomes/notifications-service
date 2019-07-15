@@ -14,4 +14,4 @@ if [ -z "$MSG" ]; then
     exit 1
 fi
 
-curl -X POST --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem -d "{ \"eventName\":\"${EVENT_NAME}\", \"data\":{\"level\":\"info\",\"message\":\"${MSG}\"}}" -H 'Content-Type: application/json' $ENDPOINT
+curl -X POST --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem -d "{ \"eventName\":\"${EVENT_NAME}\", \"data\":{\"level\":\"info\",\"tier\":2,\"topic\":\"PLATFORM_A\",\"message\":\"${MSG}\"}}" -H 'Content-Type: application/json' $ENDPOINT
