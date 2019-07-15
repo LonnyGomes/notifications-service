@@ -4,7 +4,6 @@ import Router from 'koa-router';
 import cors from 'koa2-cors';
 import { createHash } from 'crypto';
 import { NotificationModel } from '@cricket/utils';
-import { NotificationTopic } from '@cricket/utils/src/models/notification.model';
 
 const IO = require('koa-socket-2');
 const koaBody = require('koa-body');
@@ -80,13 +79,6 @@ router.post('/publish', koaBody(), async (ctx: any, next: any) => {
     const body = ctx.request.body;
     let data: NotificationModel;
 
-    if (!body.eventName) {
-        ctx.status = 400;
-        ctx.message = 'Missing eventName';
-        ctx.body = { results: 'failed', message: ctx.message };
-        return next(ctx.message);
-    }
-
     if (!body.data) {
         ctx.status = 400;
         ctx.message = 'Missing data';
@@ -129,7 +121,7 @@ router.post('/publish', koaBody(), async (ctx: any, next: any) => {
         message,
     };
 
-    io.broadcast(body.eventName, data);
+    io.broadcast(topic, data);
     ctx.body = { results: 'success' };
     await next();
 });
@@ -159,7 +151,7 @@ setInterval(() => {
         id: String(Date.now()).concat(String(Math.random() * 10000)),
         timestamp: new Date(),
         tier: 1,
-        topic: NotificationTopic.platformA,
+        topic: 'PLATFORM_A',
         level: 'info',
         message: `Message at ${new Date()}`,
         url: 'http://www.google.com',

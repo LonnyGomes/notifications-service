@@ -30,7 +30,7 @@ curl --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs
 **Triggering a notification via curl**
 
 ```bash
-curl -X POST --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem -d '{ "eventName":"news", "data":{"level":"info","message":"this is from curl"}}' -H 'Content-Type: application/json' https://server.local:3001/publish
+curl -X POST --cert certs/app/app.local.crt --key certs/app/app.local.key --cacert certs/ca/myCA.pem -d '{ "data":{"level":"info","tier":2, "platform": "PLATFORM_A", message":"this is from curl"}}' -H 'Content-Type: application/json' https://server.local:3001/publish
 ```
 
 Alternatively, you can invoke curl using the included shorthand npm script:

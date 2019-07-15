@@ -1,1 +1,4 @@
-export { NotificationModel } from './models/notification.model';
+export {
+    NotificationModel,
+    NotificationTopic
+} from './models/notification.model';

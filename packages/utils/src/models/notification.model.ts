@@ -9,9 +9,8 @@ export interface NotificationModel {
 }
 
 // list of all supported topics
-export enum NotificationTopic {
-    platformA = 'PLATFORM_A',
-    platformB = 'PLATFORM_B',
-    platformC = 'PLATFORM_C',
-    platformD = 'PLATFORM_D'
-}
+export type NotificationTopic =
+    | 'PLATFORM_A'
+    | 'PLATFORM_B'
+    | 'PLATFORM_C'
+    | 'PLATFORM_D';

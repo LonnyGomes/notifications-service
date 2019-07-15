@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { NotificationModel } from '@cricket/utils';
+import { NotificationModel, NotificationTopic } from '@cricket/utils';
 import { ElectronService } from 'ngx-electron';
 export interface SocketMessageModel {
   eventName: string;
@@ -10,7 +10,7 @@ export interface SocketMessageModel {
 
 export interface TopicModel {
   description: string;
-  name: string;
+  name: NotificationTopic;
 }
 export interface TopicStatesModel {
   [index: string]: boolean;
@@ -28,9 +28,10 @@ export class SocketIoService {
 
   // TODO: retrieve this list from the server
   topics: TopicModel[] = [
-    { description: 'Global', name: 'global' },
-    { description: 'DevOps', name: 'DevOps' },
-    { description: 'Releases', name: 'Releases' }
+    { description: 'Platform A', name: 'PLATFORM_A' },
+    { description: 'Platform B', name: 'PLATFORM_B' },
+    { description: 'Platform C', name: 'PLATFORM_C' },
+    { description: 'Platform D', name: 'PLATFORM_D' }
   ];
 
   constructor(private electron: ElectronService) {
