@@ -27,6 +27,10 @@ export class NotificationsFeedComponent implements OnInit {
     });
   }
 
+  get isChecked(): boolean {
+    return this.socket.isMuted;
+  }
+
   removeNotification(id: string) {
     this.socket.removeNotification(id);
     this.notifications = this.socket.notifications;
@@ -35,5 +39,9 @@ export class NotificationsFeedComponent implements OnInit {
   dismissAll() {
     this.socket.dismissAll();
     this.notifications = this.socket.notifications;
+  }
+
+  onMuteToggleChange($event) {
+    this.socket.isMuted = $event.checked;
   }
 }

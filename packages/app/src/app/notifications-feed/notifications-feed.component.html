@@ -1,6 +1,18 @@
 <div class="notification-container">
-  <ng-container *ngIf="notifications.length > 0; else emptyqueue">
+  <div class="buttons-container">
+    <mat-slide-toggle
+      class="toggle-item"
+      name="muteToggle"
+      class="example-margin"
+      color="primary"
+      labelPosition="before"
+      [checked]="isChecked"
+      (change)="onMuteToggleChange($event)"
+      >Mute
+    </mat-slide-toggle>
+
     <button
+      *ngIf="notifications.length > 0"
       mat-raised-button
       color="primary"
       matBadge="{{ notifications.length }}"
@@ -10,6 +22,9 @@
     >
       Dismiss all
     </button>
+  </div>
+
+  <ng-container *ngIf="notifications.length > 0; else emptyqueue">
     <mat-card
       class="notification-card"
       *ngFor="let notification of notifications"

@@ -25,6 +25,8 @@ export class SocketIoService {
   private _notifications: SocketMessageModel[];
   // tslint:disable-next-line:variable-name
   private _topicStates: TopicStatesModel = {};
+  // tslint:disable-next-line:variable-name
+  private _isMuted = false;
 
   // TODO: retrieve this list from the server
   topics: TopicModel[] = [
@@ -67,6 +69,14 @@ export class SocketIoService {
     return this.socket$.asObservable();
   }
 
+  get isMuted(): boolean {
+    return this._isMuted;
+  }
+
+  set isMuted(val: boolean) {
+    this._isMuted = val;
+  }
+
   // notifications
   get notifications(): SocketMessageModel[] {
     return this._notifications;
@@ -98,6 +108,10 @@ export class SocketIoService {
 
   listenOnEventName(eventName) {
     this.socket.on(eventName, data => {
+      // don't continue if message are muted
+      if (this.isMuted) {
+        return;
+      }
       // send system notification
       const myNotification = new Notification(`Message from ${eventName}`, {
         body: data.message
