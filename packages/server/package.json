@@ -1,6 +1,6 @@
 {
   "name": "@cricket/server",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Cricket server",
   "main": "lib/index.js",
   "scripts": {
@@ -20,7 +20,7 @@
     "typescript": "^3.4.5"
   },
   "dependencies": {
-    "@cricket/utils": "^0.0.0",
+    "@cricket/utils": "^0.1.0",
     "@types/koa-router": "^7.0.40",
     "@types/koa2-cors": "^2.0.1",
     "koa": "^2.7.0",

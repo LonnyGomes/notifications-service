@@ -1,6 +1,6 @@
 {
   "name": "@cricket/utils",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Shared utilities for cricket",
   "main": "src/index.ts",
   "scripts": {
